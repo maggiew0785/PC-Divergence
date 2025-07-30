@@ -1,6 +1,8 @@
-# PC-Divergence: Measuring Copyright Risk in Text-to-Image Generation
+# PC-D Evaluation Code (Anonymous Submission)
 
-This repository contains the implementation for measuring Prompt-Character Divergence (PC-D), a novel metric for assessing copyright infringement risk in text-to-image generation models.
+This repository contains code to compute **Prompt-Character Divergence (PC-D)** scores for evaluating semantic drift in text-to-image models. The code supports generation-free evaluation of model outputs and is designed for reproducibility on standard hardware.
+
+This code was submitted as supplementary material to a NeurIPS 2025 paper submission.
 
 ## Overview
 
@@ -41,7 +43,7 @@ pc-divergence/
 
 ```bash
 # Clone the repository
-git clone https://github.com/maggiew0785/PC-Divergence.git
+# For reviewers only: use local folder after unzipping the anonymous .zip
 cd pc-divergence
 
 # Create virtual environment
@@ -50,13 +52,22 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+Key libraries used:
+* `torch`
+* `open_clip_torch`
+* `sentence-transformers`
+* `transformers`
+* `pandas`, `numpy`, `scipy`, `tqdm`
+* `ftfy` (for text normalization)
+See `requirements.txt` for the full list.
 ```
 
 ### 2. Generate Prompts
 
-Create prompts using two methodologies:
-- **Natural Language**: GPT-o3 generated prompts with specificity gradient (10 per character)
-- **Keywords**: COPYCAT framework with 5/10/15/20 keywords (10 per character)
+Create prompts of gradient specificity using two methodologies:
+- **Natural Language**: [Optional] This script requires an OpenAI API key and was used for prompt generation. Prompts are already provided in `data/prompts/`. (10 per character)
+- **Keywords**: Random sample 5/10/15/20 co-occurence keywords (10 per character) from the LAION-2B dataset (following a co-occurrence keyword strategy inspired by prior frameworks)
 
 ```bash
 python scripts/01_generate_prompts.py \
@@ -141,17 +152,7 @@ python scripts/06_quadrant_analysis.py \
 
 ### Characters Studied
 
-The project focuses on 10 popular copyrighted characters:
-- Mario
-- Mickey Mouse
-- Yoda
-- Pikachu
-- Spider-man
-- Batman
-- Tinkerbell
-- Spongebob Squarepants
-- Elsa
-- Sonic the Hedgehog
+The project focuses on 10 popular copyrighted characters found in `data/characters.txt`
 
 ### Quadrant Analysis
 
@@ -188,27 +189,12 @@ See `requirements.txt` for complete list with version requirements.
 - **RAM**: ≥16GB system RAM
 - **Storage**: ~50GB for generated images and embeddings
 
-## Citation
+## 🔐 Anonymity Statement
 
-If you use this code in your research, please cite:
+This codebase has been anonymized for double-blind reviewing. No author-identifying metadata or URLs are included.
 
-```bibtex
-tbd:
-@article{Wang_2025,
-    title={PC-Divergence: Measuring Copyright Risk in Text-to-Image Generation},
-    author={},
-    year={2025}
-}
-```
+Please contact the authors after acceptance for de-anonymized code, models, or datasets.
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Support
-
-For questions or issues, please open an issue on GitHub or contact [maggiewang@princeton.edu].
