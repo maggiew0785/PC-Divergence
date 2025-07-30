@@ -20,7 +20,7 @@ Where:
 pc-divergence/
 ├── data/
 │   ├── characters.txt              # List of copyrighted characters studied
-│   └── annotations/               # PC-D scores and human annotations per model
+│   └── annotations/                # PC-D scores and human annotations per model
 │       ├── sdxl.csv
 │       ├── playground-v2.5.csv
 │       └── deepfloyd-if.csv
