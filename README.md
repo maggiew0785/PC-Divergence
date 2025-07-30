@@ -19,16 +19,20 @@ Where:
 ```
 pc-divergence/
 ├── data/
-│   └── characters.txt          # List of copyrighted characters studied
+│   ├── characters.txt              # List of copyrighted characters studied
+│   └── annotations/               # PC-D scores and human annotations per model
+│       ├── sdxl.csv
+│       ├── playground-v2.5.csv
+│       └── deepfloyd-if.csv
 ├── scripts/
-│   ├── 01_generate_prompts.py  # Generate prompts using GPT-o3 and COPYCAT
-│   ├── 02_generate_images.py   # Generate images with SDXL, DeepFloyd, Playground
-│   ├── 03_compute_embeddings.py # Compute OpenCLIP embeddings
-│   ├── 04_compute_pcd.py       # Calculate PC-D scores
-│   ├── 05_process_annotations.py # Process human annotations
-│   └── 06_quadrant_analysis.py # 4-quadrant responsibility analysis
-├── requirements.txt            # Python dependencies
-└── README.md                   # This file
+│   ├── 01_generate_prompts.py      # Generate prompts using GPT-o3 and COPYCAT
+│   ├── 02_generate_images.py       # Generate images with SDXL, DeepFloyd, Playground
+│   ├── 03_compute_embeddings.py    # Compute OpenCLIP embeddings
+│   ├── 04_compute_pcd.py           # Calculate PC-D scores
+│   ├── 05_process_annotations.py   # Process human annotations
+│   └── 06_quadrant_analysis.py     # 4-quadrant responsibility analysis
+├── requirements.txt                # Python dependencies
+└── README.md                       # This file
 ```
 
 ## Quick Start
@@ -189,10 +193,10 @@ See `requirements.txt` for complete list with version requirements.
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{your_paper_2025,
+tbd:
+@article{Wang_2025,
     title={PC-Divergence: Measuring Copyright Risk in Text-to-Image Generation},
-    author={Your Name},
-    journal={Your Journal},
+    author={},
     year={2025}
 }
 ```
@@ -207,4 +211,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Support
 
-For questions or issues, please open an issue on GitHub or contact [your-email@domain.com].
+For questions or issues, please open an issue on GitHub or contact [maggiewang@princeton.edu].
