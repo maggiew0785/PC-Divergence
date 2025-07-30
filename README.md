@@ -41,7 +41,7 @@ pc-divergence/
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/maggiew0785/PC-Divergence.git
 cd pc-divergence
 
 # Create virtual environment
