@@ -177,7 +177,7 @@ Key dependencies:
 - **PyTorch**: Deep learning framework
 - **OpenCLIP**: For computing embeddings
 - **Diffusers**: HuggingFace diffusion models
-- **OpenAI**: GPT-o3 API for prompt generation
+- **OpenAI**: GPT-o3 API for prompt generation [Optional]
 - **Pandas/NumPy**: Data manipulation
 - **Scikit-learn**: Inter-rater reliability metrics
 
