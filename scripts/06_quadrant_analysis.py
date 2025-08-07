@@ -19,9 +19,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from scipy.optimize import minimize_scalar
 from pathlib import Path
-from sklearn.metrics import f1_score
 
 def load_data(model_name, annotations_path, pcd_path):
     """Load and merge annotation data with PC-D scores."""
@@ -47,40 +45,15 @@ def load_data(model_name, annotations_path, pcd_path):
     return annotations
 
 
-def find_optimal_threshold(scores, labels):
-    """Find threshold that maximizes agreement with human labels."""
-	def objective(threshold):
-    	predictions = (scores >= threshold).astype(int)
-    	return -f1  # Minimize negative F1
-    
-    # Search for optimal threshold
-    result = minimize_scalar(objective, bounds=(scores.min(), scores.max()), method='bounded')
-    return result.x
-
-
 def compute_quadrant_thresholds(all_data):
     """
-    Compute unified thresholds following the paper's methodology:
-    1. Find optimal PC-D threshold per model-character pair
-    2. Use median of these optimal thresholds as unified boundary
+    Compute unified thresholds using global medians:
+    1. PC-D threshold: median of all PC-D scores across all data
+    2. Prompt specificity threshold: median of all prompt specificity scores
     """
-    optimal_thresholds = []
-    
-    # Get optimal PC-D thresholds per model-character pair
-    for model in all_data['model'].unique():
-        model_data = all_data[all_data['model'] == model]
-        for character in model_data['target'].unique():
-            char_data = model_data[model_data['target'] == character]
-            if len(char_data) > 0:
-                optimal_t = find_optimal_threshold(
-                    char_data['pc_d'].values,
-                    char_data['is_infringing'].values
-                )
-                optimal_thresholds.append(optimal_t)
-    
-    # Unified thresholds (median of optimized values)
-    pc_d_threshold = np.median(optimal_thresholds)
-    prompt_spec_threshold = np.median(all_data['prompt_specificity'])
+    # Use global medians instead of F1-optimized thresholds
+    pc_d_threshold = all_data['pc_d'].median()
+    prompt_spec_threshold = all_data['prompt_specificity'].median()
     
     return pc_d_threshold, prompt_spec_threshold
 
@@ -124,6 +97,14 @@ def calculate_quadrant_statistics(data):
                 'count': count,
                 'infringement_rate': infringement_rate,
                 'infringing_count': q_data['is_infringing'].sum()
+            })
+        else:
+            # Handle empty quadrants
+            stats.append({
+                'quadrant': quadrant,
+                'count': 0,
+                'infringement_rate': 0.0,
+                'infringing_count': 0
             })
     
     return pd.DataFrame(stats)
@@ -198,7 +179,7 @@ def plot_quadrant_scatter(data, pc_d_threshold, prompt_spec_threshold, output_pa
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Compute quadrant analysis for PC-D scores')
+    parser = argparse.ArgumentParser(description='Compute quadrant analysis for PC-D scores using global medians')
     parser.add_argument('--annotations_dir', type=str, required=True,
                         help='Directory containing annotation CSV files')
     parser.add_argument('--pcd_dir', type=str, required=True,
@@ -240,11 +221,11 @@ def main():
     # Combine all data
     combined_data = pd.concat(all_data, ignore_index=True)
     
-    # Compute unified thresholds
-    print("\nComputing unified thresholds...")
+    # Compute unified thresholds using global medians
+    print("\nComputing unified thresholds using global medians...")
     pc_d_threshold, prompt_spec_threshold = compute_quadrant_thresholds(combined_data)
-    print(f"PC-D threshold: {pc_d_threshold:.4f}")
-    print(f"Prompt specificity threshold: {prompt_spec_threshold:.4f}")
+    print(f"PC-D threshold (global median): {pc_d_threshold:.4f}")
+    print(f"Prompt specificity threshold (global median): {prompt_spec_threshold:.4f}")
     
     # Assign quadrants
     combined_data = assign_quadrants(combined_data, pc_d_threshold, prompt_spec_threshold)
